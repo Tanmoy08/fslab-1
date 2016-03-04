@@ -80,7 +80,7 @@ public :
 	{
 		fstream fp1;
 		string rcvusn;
-		fp1.open("data1.txt",ios::in);
+		fp1.open("data2.txt",ios::in);
 		while(!fp1.eof())
 		{
 			getline(fp1,buffer);
@@ -153,7 +153,7 @@ public :
 		if (pos1 < 0) {
 			return;
 		}
-		pos1=pos1-99;
+		pos1=pos1-101;
 		cout<<"record modi pos :"<<pos1<<endl;
 		cout<<"enter the field to be modified :\n1.Name\n2.USN\n3.branch\n4.sem"<<endl;
 		cin>>choice;
@@ -195,8 +195,8 @@ public :
 			break;
 		default: cout<<"Enter a valid choice"<<endl;
 		}
-		fp1.open(fln,ios::out);
-		fp1.seekp(pos1);
+		fp1.open(fln);
+		fp1.seekp(pos1,ios::beg);
 		fp1<<buffer;
 		fp1.close();
 	}
