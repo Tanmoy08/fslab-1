@@ -50,15 +50,17 @@ class Studentrecord{
 		fp1.open("data1.txt",ios::out|ios::app);
 		fp1<<buffer;
                 fp1.close();
+		return;
 		
 	}
-        int print()
+        int prit()
         {
+	cout<<"inside print"<<endl;
             fstream fp1;
             fp1.open("data1.txt",ios::in);
             int pos=fp1.tellp();
             fp1.close();
-            
+            return pos;
         }
 };
 int main()
@@ -74,7 +76,7 @@ int main()
             s.read();
             int len=s.pack();
             s.write();
-            int pos=s.print();
+            int pos=s.prit();
             rrn[rsize]=pos-len;
             for(int i=0;i<=rrn.size();i++)
                 cout<<rrn[i]<<endl;
