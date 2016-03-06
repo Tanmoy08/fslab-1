@@ -1,8 +1,6 @@
-
-
 //============================================================================
-// Name        : pg2f.cpp
-// Author      :
+// Name        : pg3.cpp
+// Author      : 
 // Version     :
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
@@ -23,6 +21,7 @@ class Student {
 	string branch;
 	int sem;
 	string buffer;
+        int fdsize; //is used to keep track of the size of the record which will be modified
 public :
 	void read()
 	{
@@ -56,19 +55,14 @@ public :
 		stringstream out;
 		out<<sem;
 		sem1=out.str();
-		int i;
 		temp=usn+'|'+name+'|'+branch+'|'+sem1+'$';
-
 		cout<<temp<<endl;
 		buffer=temp;
 	}
 	void write()
 	{
 		fstream fp1;
-		char flname[max];
-		cout<<"enter the file name to write the read record"<<endl;
-		cin>>flname;
-		fp1.open(flname,ios::out|ios::app);
+		fp1.open("data.txt",ios::out|ios::app);
 		fp1<<buffer;
 		fp1<<endl;
 		fp1.close();
@@ -77,13 +71,14 @@ public :
 	{
 		fstream fp1;
 		string rcvusn;
-		fp1.open("data3.txt",ios::in);
+		fp1.open("data.txt",ios::in);
 		while(!fp1.eof())
 		{
 			getline(fp1,buffer);
-			cout<<"record read"<<endl;
-			cout<<buffer<<endl;
+			cout<<"record read :"<<buffer<<endl;
 			int pos=fp1.tellp();
+                        fdsize=buffer.size();
+                        cout<<"file record size: "<<fdsize<<endl;
 			cout<<"position in file : "<<pos<<endl;
 			rcvusn=unpack();
 		if(usn==key)
@@ -142,16 +137,16 @@ public :
 	void modify(string key)
 	{
 		fstream fp1;
-		cout<<"enter the filename to be modified"<<endl;
+		/*cout<<"enter the filename to be modified"<<endl;
 		char fln[10];
-		cin>>fln;
+		cin>>fln;*/
 		int choice;
 		int pos1=search(key);
 		if (pos1 < 0) {
 			return;
 		}
 
-		cout<<"record modi pos :"<<pos1<<endl;
+		cout<<"record modification pos :"<<pos1<<endl;
 		cout<<"enter the field to be modified :\n1.Name\n2.USN\n3.branch\n4.sem"<<endl;
 		cin>>choice;
 		switch(choice)
@@ -192,8 +187,9 @@ public :
 			break;
 		default: cout<<"Enter a valid choice"<<endl;
 		}
-		pos1=pos1-(buffer.size()-1);
-		fp1.open(fln);
+		pos1=pos1-(fdsize+1);
+		cout<<"value of pos1:"<<pos1<<endl;
+		fp1.open("data.txt");
 		fp1.seekp(pos1,ios::beg);
 		fp1<<buffer;
 		fp1<<endl;
@@ -203,9 +199,8 @@ public :
 };
 
 int main() {
-	int choice,i;
+	int choice,i=0;
 	Student s1;
-//	cout<<"enter your choice :\n1> insert\n2>search\n3>delete\n4>modify\n5>exit\n----"<<endl;
 	while(1)
 	{
 		cout<<"enter your choice :\n1> insert\n2>search\n3>delete\n4>modify\n5>exit\n----"<<endl;
@@ -258,4 +253,3 @@ int main() {
 	}
 	return 0;
 }
-
