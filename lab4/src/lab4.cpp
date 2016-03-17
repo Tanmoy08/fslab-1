@@ -42,7 +42,7 @@ class Studentrecord{
 		stringstream out;
 		out<<sem;
 		sem1=out.str();
-		temp=usn+'|'+name+'|'+branch+'|'+sem1;
+		temp=usn+'|'+name+'|'+branch+'|'+sem1+'$';
 		cout<<temp<<endl;
 		buffer=temp;
                int a=buffer.size();
@@ -51,31 +51,35 @@ class Studentrecord{
         int write()
 	{
 		fstream fp1;
-		fp1.open("data1.txt",ios::out|ios::app);
+		fp1.open("data2.txt",ios::out|ios::app);
 		fp1<<buffer;
-                int pos=fp1.tellp();
-                cout<<"pos:"<<pos<<endl;
-                 fp1.close();
-                 return pos;
-		
+        int pos=fp1.tellp();
+        cout<<"pos:"<<pos<<endl;
+        fp1.close();
+        int len=buffer.size();
+        rrn.push_back(pos-len);
+        rsize++;
+        cout<<"rsize:"<<rsize<<endl;
+        cout<<"content rrn:"<<rrn[rsize-1];
+        return pos;
 	}
         void search(int recno)
         {
             fstream fp1;
-            int a=rrn[recno];
+            int a=rrn[recno-1];
             cout<<"urrent record position : "<<a<<endl;
-            int b=rrn[recno+1];
+            int b=rrn[recno];
             cout<<"next record position : "<<b<<endl;
             int len=b-a;
-            cout<<"length of the record : "<<endl;
-            fp1.open("data1.txt");
+            //cout<<"length of the record : "<<endl;
+            fp1.open("data2.txt",ios::in);
             fp1.seekp(a,ios::beg);
-            getline(fp1,buffer);
-            cout<<"Student record is :"<<endl;
-            unpack(len);
+            getline(fp1,buffer,'$');
+            cout<<"Student record is :"<<buffer<<endl;
+           // unpack(len);
             fp1.close();
         }
-        void unpack(int len)
+        /*void unpack(int len)
         {
             string s;
             int i=0;
@@ -112,49 +116,52 @@ class Studentrecord{
             cout<<"name is :"<<name<<endl;
             cout<<"branch is :"<<branch<<endl;
             cout<<"sem is :"<<sem<<endl;
-	    }
+	    }*/
 };
 int main()
-{   
+{
     fstream fp1;
     int choice,rec;
     Studentrecord s;
-    cout<<"Enter your choice :\n1) Insert\n2) Search"<<endl;
+    while(1)
+    {
+    cout<<"Enter your choice :\n1) Insert\n2) Search\n3) exit"<<endl;
     cin>>choice;
     switch(choice)
     {
         case 1:
         {
             string s1;
-            fp1.open("data1.txt");
-            fp1.seekg(0,ios::beg);
+            //fp1.open("data2.txt",ios::out);
+            //fp1.seekg(0,ios::beg);
             //fp1<<rsize;
-            s1=fp1.get();
-            cout<<"s1:"<<s1<<endl;
-            stringstream convert(s1);
-            convert>>rsize;cout<<"initial vlue of rsize :"<<rsize<<endl;
+            /*s1=fp1.get();
+            cout<<"s1:"<<s1<<endl;*/
+            /*stringstream convert(s1);
+            convert>>rsize;
+            cout<<"initial vlue of rsize :"<<rsize<<endl;
             fp1.close();
-            fp1.open("data1.txt");
+            fp1.open("data2.txt");
             fp1.seekp(0,ios::beg);
             fp1<<rsize;
-            fp1.close();
+            fp1.close();*/
             s.read();
             int len=s.pack();
             int pos=s.write();
             cout<<"back"<<endl;
-            
-            rrn.push_back(pos-len);
-            
-            cout<<"rsize is:"<<rsize<<endl;
+
+            //rrn.push_back(pos-len);
+
+            /*cout<<"rsize is:"<<rsize<<endl;
             for(int i=rsize;i>=0;i--)
                 cout<<"element"<<i<<"is : "<<rrn[i]<<endl;
             rsize++;
-            cout<<"value of rsize is : "<<rsize<<endl;
-            fp1.close();
-            fp1.open("data1.txt");
+            cout<<"value of rsize is : "<<rsize<<endl;*/
+           // fp1.close();
+            /*fp1.open("data2.txt");
             fp1.seekp(0,ios::beg);
             fp1<<rsize;
-            fp1.close();
+            fp1.close();*/
         }
         break;
         case 2:
@@ -164,6 +171,13 @@ int main()
             s.search(rec);
         }
         break;
+        case 3:
+        {
+        	exit(0);
+        }
+        break;
         default: cout<<"invalid option chosen"<<endl;
     }
+    }
+    return 0;
 }
