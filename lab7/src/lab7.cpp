@@ -45,9 +45,9 @@ void seqo :: load(char flname[max],char flname1[max])
         i++;
         c2++;   
     }
-   cout<<"value of c1 and c2 is:"<<c1<<endl<<c2<<endl;
+   /*cout<<"value of c1 and c2 is:"<<c1<<endl<<c2<<endl;
     cout<<endl;
-    cout<<"closed file"<<endl;
+    cout<<"closed file"<<endl;*/
      cout<<"content of l1:"<<endl;
     for(i=0;i<c1;i++)
         cout<<l1[i]<<endl;
@@ -96,23 +96,25 @@ void seqo :: match()
 {
      cout<<"matching records are :"<<endl;
     int i=0,j=0,k=0;
-    for(i=0;i<c1;i++)
-    {
-        for(j=0;j<c2;j++)
-        {
-          
-                if(l1[i]==l2[j])
-                {
-                   // cout<<"equality found"<<endl;
-                    cout<<l1[i]<<endl;
-                    k++;
-                }
-              if(l1[i]<l2[j])
-               break;
-       
-            
-        }
-    }
+  while(i<c1 && j<c2)
+	{
+		if(l1[i]==l2[j])
+		{
+			cout<<l1[i]<<endl;
+			i++;
+			j++;	
+		}
+		if(l1[i]<l2[j])
+		{
+			i++;
+			continue;
+		}
+		if(l1[i]>l2[j])
+		{
+			j++;
+			continue;
+		}
+	}
 		
 }
 int main()
