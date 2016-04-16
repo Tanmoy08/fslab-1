@@ -1,9 +1,9 @@
 //============================================================================
-// Name        : pg3.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Name        : lab12.cpp
+// Author      : TANMOY PAUL
+// Version     :c++
+// Copyright   : everyone is allowed to copy freely and redistribute
+// Description : reclaiming space using linked list
 //============================================================================
 #include<sys/types.h>
 #include<string.h>
