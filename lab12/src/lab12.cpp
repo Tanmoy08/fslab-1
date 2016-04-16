@@ -1,3 +1,10 @@
+//============================================================================
+// Name        : lab12.cpp
+// Author      : TANMOY PAUL
+// Version     :c++
+// Copyright   : everyone is allowed to copy freely and redistribute
+// Description : reclaiming space using linked list
+//============================================================================
 #include<sys/types.h>
 #include<string.h>
 #include<fstream>
