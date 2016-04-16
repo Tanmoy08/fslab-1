@@ -1,11 +1,9 @@
-
-
 //============================================================================
-// Name        : pg2f.cpp
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Name        : lab2.cpp
+// Author      : TANMOY PAUL
+// Version     :c++
+// Copyright   : everyone is allowed to copy freely and redistribute
+// Description : fixed length record
 //============================================================================
 #include<sys/types.h>
 #include<string.h>
