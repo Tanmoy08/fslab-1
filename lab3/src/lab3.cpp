@@ -1,9 +1,9 @@
 //============================================================================
-// Name        : lab12.cpp
+// Name        : lab3.cpp
 // Author      : TANMOY PAUL
 // Version     :c++
 // Copyright   : everyone is allowed to copy freely and redistribute
-// Description : reclaiming space using linked list
+// Description : variable length records
 //============================================================================
 #include<sys/types.h>
 #include<string.h>
