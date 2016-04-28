@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : hash.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -12,9 +20,7 @@ int hashalgo(string str,int prime)
 	int i=0;
 	while(c=str[i++])
 	{
-		cout<<c<<endl;
 		hash=((hash<<5)+hash)+c;
-		/* hash * 33 + c */
 	}
 	return hash%prime;
 }
@@ -136,15 +142,19 @@ public:
 		fstream f(filename.c_str(),ios::in|ios::out);
 		buffer[rsize] = '\0';
         int bucket_no = hashalgo(key,buckets);
-		f.seekg(bucket_no * b_size * rsize);
-		for(int i = 0; i < buckets; i++)
+		f.seekg(0,ios::beg);
+		for(int i = 0; i < (buckets * b_size ); i++)
 		{
+			//cout<<"pos in file search :"<<f.tellp()<<endl;
 		    f.read(buffer,rsize);
             if ( buffer[0] != '$' )
             {
+            	//cout<<"buffer : "<<buffer<<endl<<endl;
             	Student s = Student::unpack(buffer);
             	if (s.match(key,value))
+            	{
             		return buffer;
+            	}
             }
 		}
 	return "";
@@ -153,6 +163,8 @@ public:
 int main()
 {
 	int n;
+	char ch;
+	string key;
 	cout<<"Enter the Number of Buckets"<<endl;
 	cin>>n;
 	Hashfile f("data.txt",n,5,100);
@@ -166,7 +178,18 @@ int main()
 	f.addrec(s3.pack(100),"g");
 	f.addrec(s4.pack(100),"j");
 	f.addrec(s5.pack(100),"m");
-
-	cout << f.search("name","d") << endl;
+	while(1)
+	{
+	cout<<"Do you want to search?(y/n)";
+	cin>>ch;
+	if(ch=='y'|| ch=='Y')
+		{
+		cout<<"Enter key to be searched : ";
+		cin>>key;
+		cout << f.search("name",key) << endl;
+		}
+	else
+		break;
+	}
 	return 0;
 }
