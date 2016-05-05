@@ -49,13 +49,16 @@ int load()
 	int i=0;
 	fp.open("inde.txt",ios::in);
 	string buffer;
+	getline(fp,buffer);
+	if(buffer=="\n")
+		return 0;
+	else
+		fp.seekp(0,ios::beg);
 	while(!fp.eof())
 	{
 		usn.erase();
 		pos.erase();
 		getline(fp,buffer);
-		if(buffer=="\0" )
-			return 0;
 		 while(buffer[i]!='|')
 		 {
 		    usn+=buffer[i];
@@ -313,8 +316,8 @@ void indf::rem(string key,int pos)
     	   	  usn1+=buffer[i];
     	   	  i++;
        }
-       siz1=buffer.size();
-       index1[l][0]=usn1;
+
+       index1[l1][0]=usn1;
 
        stringstream out;
                   out<<pos1;
@@ -340,8 +343,9 @@ int main()
     indf ind;
     fstream fp1;
     fp1.open("inde.txt",ios::in);
-	if(!fp1.eof())
-		l=load();
+	l=load();
+	if(l==-1)
+		l=0;
     cout<<"l :"<<l<<endl;
     while(1)
     {
