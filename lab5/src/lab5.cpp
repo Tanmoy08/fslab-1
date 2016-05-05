@@ -5,7 +5,81 @@
 #include<sstream>
 #include<sys/types.h>
 #include<unistd.h>
+#include<vector>
+#define max 100
 using namespace std;
+string index1[max][2];
+void sort(int l)
+{
+	string temp,tempu;
+	int usn1=0,usn2=0;
+	cout<<l<<endl;
+	for(int i=0;i<l;i++)
+	{
+		for(int j=i+1;j<l;j++)
+		{
+
+		usn1=atoi(index1[i][0].c_str());
+		usn2=atoi(index1[j][0].c_str());
+		cout<<usn1<<"|||||"<<usn2<<endl;
+		if(usn1>usn2)
+		{
+			temp=index1[i][0];
+			tempu=index1[i][1];
+
+			index1[i][0]=index1[j][0];
+			index1[i][1]=index1[j][1];
+
+			index1[j][0]=temp;
+		    index1[j][1]=tempu;
+		}
+	}
+	}
+	for(int i=0;i<l;i++)
+	{
+		cout<<index1[i][0];
+		cout<<endl;
+	}
+	}
+int load()
+{
+	fstream fp;
+	int l=0;
+	string usn,pos;
+	int i=0;
+	fp.open("inde.txt",ios::in);
+	string buffer;
+	while(!fp.eof())
+	{
+		usn.erase();
+		pos.erase();
+		getline(fp,buffer);
+		if(buffer=="\0")
+			return 0;
+		 while(buffer[i]!='|')
+		 {
+		    usn+=buffer[i];
+		    i++;
+		 }
+		 i++;
+		 while(buffer[i]!='$')
+		    {
+		    	pos+=buffer[i];
+		    	i++;
+		    }
+		 index1[l][0]=usn;
+		 index1[l][1]=pos;
+		 l++;
+		 i=0;
+	}
+	for(i=0;i<l;i++)
+	{
+		cout<<index1[i][0];
+		cout<<endl;
+	}
+	fp.close();
+	return l-1;
+}
 class student{
     string name;
     string usn;
@@ -15,28 +89,7 @@ class student{
 public:
     string read();
     string pack();
-};
-class file{
-    string name;
-    string usn;
-    string branch;
-    int sem;
-    string buffer;
-public:
-    int pos;
-    void write(string);
-    void unpack(int);
-    //int search(string);
-    void del(int);
-};
-class indf{
-public:
-    int pos;
-    void insert(string,int);
-    int search(string);
-    void rem(string);
-    void indrem(string);
-    void updat(int);
+    void unpack(int pos1);
 };
 string student::read()
 {
@@ -74,85 +127,7 @@ string student::pack()
     buffer=temp;
     return buffer;
 }
-void file :: write(string buf)
-{
-    fstream fp1;
-    //char flname[max];
-    //cout<<"enter the file name to write the read record"<<endl;
-    //cin>>flname;
-    fp1.open("data.txt",ios::out|ios::app);
-    fp1<<buf;
-    fp1<<endl;
-    int sz=buf.size();
-    int loc=fp1.tellp();
-    pos=loc-sz;
-    fp1.close();
-}
-void indf::insert(string key,int pos)
-{
-    fstream fp1;
-    fp1.open("inde.txt",ios::out|ios::app);
-    string pos1;
-    string temp;
-    stringstream out;
-    out<<pos;
-    pos1=out.str();
-    int i;
-    temp=key+'|'+pos1;
-    for(i=temp.size();i<50;i++)
-    {
-    	temp+='$';
-    }
-    fp1<<temp;
-    fp1<<endl;
-    fp1.close();
-}
-int indf::search(string key)
-{
-   // cout<<"inside search"<<endl;
-    fstream fp1;
-    string buffer,unkey,unpos,s;
-    int i;
-    fp1.open("inde.txt",ios::in);
-    while(!fp1.eof())
-    {
-     //   cout<<"*"<<endl;
-	getline(fp1,buffer);
-        int k=key.size();
-        string sub=buffer.substr(0,k);
-        //cout<<"sub string is : "<<sub<<endl;
-        if(key==sub)
-        {
-       //     cout<<"almost found"<<endl;
-            while(buffer[i]!='|')
-            {
-		unkey+=buffer[i];
-		i++;
-            }
-            i++;
-            while(buffer[i]!='$')
-            {
-		unpos+=buffer[i];
-		i++;
-            }
-         //   cout<<"done unpacking"<<endl;
-            s=unpos;
-            stringstream convert(s);
-            convert>>pos;
-            cout<<"position in file : "<<pos<<endl;
-           // cout<<"out of search"<<endl;
-            return 0;
-        }
-        else
-        {
-            cout<<"record not found"<<endl;
-            
-        }
-    }
-    return -1;
-      //cout<<"out of search"<<endl;
-}
-void file::unpack(int pos1)
+void student::unpack(int pos1)
 {
     fstream fp1;
     string buffer;
@@ -165,46 +140,133 @@ void file::unpack(int pos1)
     usn.erase();
     while(buffer[i]!='|')
     {
-	usn+=buffer[i];
-	i++;
+    	usn+=buffer[i];
+    	i++;
     }
     i++;
     name.erase();
     while(buffer[i]!='|')
     {
-	name+=buffer[i];
-	i++;
+    	name+=buffer[i];
+    	i++;
     }
     i++;
     branch.erase();
     while(buffer[i]!='|')
     {
-	branch+=buffer[i];
-	i++;
+    	branch+=buffer[i];
+    	i++;
     }
     i++;
     sem=0;
     while(buffer[i]!='$')
     {
-	s=buffer[i];
-	stringstream convert(s);
-	convert>>sem;
-	i++;
+    	s=buffer[i];
+    	i++;
     }
+    stringstream convert(s);
+    convert>>sem;
     cout<<"usn is : "<<usn<<endl;
     cout<<"name is : "<<name<<endl;
     cout<<"branch is : "<<branch<<endl;
     cout<<"sem is : "<<sem<<endl;
 }
-void indf::rem(string key)
+class file{
+public:
+    int write(string buf);
+};
+int file :: write(string buf)
 {
-   //cout<<"started to remove record"<<endl; 
-   //cout<<"back to remove"<<endl;
-   string buffer,usn1;
+	int pos=0;
+    fstream fp1;
+    fp1.open("data.txt",ios::out|ios::app);
+    pos=fp1.tellp();
+    fp1<<buf;
+    fp1<<endl;
+    fp1.close();
+    return pos;
+}
+class indf{
+public:
+    void insert(int l);
+    int search(string key);
+    void rem(string key,int pos);
+};
+void indf::insert(int l)
+{
+    fstream fp1;
+    fp1.open("inde.txt",ios::out);
+    fp1.close();
+    fp1.open("inde.txt",ios::out|ios::app);
+    int i;
+    string temp;
+    for(i=0;i<l;i++)
+    {
+    	 temp=index1[i][0]+'|'+index1[i][1];
+    	 for(int j=temp.size();j<50;j++)
+    	 {
+    	     temp+='$';
+    	 }
+    	 fp1<<temp;
+    	 fp1<<endl;
+    }
+    fp1.close();
+}
+int indf::search(string key)
+{
+    fstream fp1;
+    string buffer,sub,unkey,unpos,s;
+    int i=0,j=0,pos=0;
+    fp1.open("inde.txt",ios::in);
+    while(!fp1.eof())
+    {
+    	buffer.erase();
+    	j=0;
+    	getline(fp1,buffer);
+        while(buffer[j]!='|')
+        	{
+        	sub+=buffer[j];
+        	j++;
+        	}
+        if(key==sub)
+        {
+            while(buffer[i]!='|')
+            {
+            		unkey+=buffer[i];
+            		i++;
+            }
+            i++;
+            while(buffer[i]!='$')
+            {
+            		unpos+=buffer[i];
+            		i++;
+            }
+            s=unpos;
+            stringstream convert(s);
+            convert>>pos;
+            cout<<"position in file : "<<pos<<endl;
+            fp1.close();
+            return pos;
+        }
+        else
+        {
+            sub.erase();
+            unkey.erase();
+            unpos.erase();
+        }
+    }
+    cout<<"record not found"<<endl;
+    fp1.close();
+    return -1;
+}
+
+void indf::rem(string key,int pos)
+{
+   string buffer,usn1,i1;
    indf f;
    int i=pos;
-   int j=0,l,siz1=0,loc1=0,pos1=0;
-   cout<<"value of pos in rem function : "<<i<<endl;  
+   int j=0,l1=0,l=0,siz1=0,loc1=0,pos1=0;
+   cout<<"value of pos in rem function : "<<i<<endl;
    fstream fp1,fp2,fp3;
    fp1.open("data.txt",ios::in);
    fp2.open("tempdata.txt",ios::out);
@@ -213,28 +275,20 @@ void indf::rem(string key)
    l=0;
    while(!fp1.eof())
    {
+	   j=fp1.tellp();
    getline(fp1,buffer);
    l++;
-   //cout<<"value of l is : "<<l<<endl;
-   j=fp1.tellp();
-   j=j-buffer.size();
-   /*cout<<"value of i : "<<i<<endl<<"value of j : "<<j<<endl;*/
    if(j==i)
    {
-       //cout<<"inside if"<<endl;
        continue;
    }
    else
    {
-       //fp2.seekp(0,ios::beg);
-       //int t=fp2.tellp();
-      // cout<<"inside else at pos : "<<t<<endl;
        fp2<<buffer;
        fp2<<endl;
    }
    }
    l=l-2;
-   //cout<<"value of l is : "<<l<<endl;
    fp1.close();
    fp2.close();
    fp1.open("data.txt",ios::out);
@@ -248,94 +302,67 @@ void indf::rem(string key)
        i=0;
        if(l==0)
            break;
+       pos1=fp1.tellp();
        getline(fp2,buffer);
        fp1<<buffer;
        fp1<<endl;
        l--;
        usn1.clear();
        while(buffer[i]!='|')
-    {
-	usn1+=buffer[i];
-	i++;
-    }
-       siz1=buffer.size();
-       loc1=fp1.tellp();
-       pos1=loc1-siz1;
-       f.insert(usn1,pos1);
+       {
+    	   	  usn1+=buffer[i];
+    	   	  i++;
        }
-  // indrem(key);
-  // cout<<"back to rem function"<<endl;
+       siz1=buffer.size();
+
+       stringstream out;
+                  out<<pos1;
+                  i1=out.str();
+                  index1[l1][1]=i1;
+                  l1++;
+                  sort(l1);
+                  f.insert(l1);
+
+       }
    fp1.close();
-  // cout<<"fp1 closed"<<endl;
    fp2.close();
 }
-/*void indf :: indrem(string key)
-{
-    int l=0;
-    fstream fp1,fp2;
-    string buffer;
-    fp1.open("inde.txt",ios::in);
-    fp2.open("tempinde.txt",ios::out);
-    fp2.close();
-    fp2.open("tempinde.txt",ios::out|ios::app);
-    while(!fp1.eof())
-    {
-        getline(fp1,buffer);
-        l++;
-        int k=key.size();
-        string sub=buffer.substr(0,k);
-        if(key==sub)
-        {
-           continue; 
-        }
-        else
-        {
-           fp2<<buffer;
-           fp2<<endl;
-        }
-    }
-    l=l-2;
-    fp1.close();
-    fp2.close();
-    //cout<<"still remove"<<endl;
-    fp1.open("inde.txt",ios::out);
-    fp1.close();
-    fp1.open("inde.txt",ios::out|ios::app);
-    fp2.open("tempinde.txt",ios::in);
-    while(!fp2.eof())
-    {
-        if(l==0)
-            break;
-        getline(fp2,buffer);
-        fp1<<buffer;
-        fp1<<endl;
-        l--;
-    }
-    fp1.close();
-   // cout<<"fp1 close"<<endl;
-    fp2.close();
-}*/
+
+
 int main()
 {
-    int choice,i,k;
-    string buffer,key;
+
+    int choice,i,k,l=0,m=0;
+    string buffer,key,i1;
     student s;
     file f;
     indf ind;
+    fstream fp1;
+    fp1.open("inde.txt",ios::in);
+	if(!fp1.eof())
+		l=load();
+    cout<<"l :"<<l<<endl;
     while(1)
     {
     cout<<"1) add\n2) search\n3)delete\n------------\nEnter your choice : ";
     cin>>choice;
     cout<<endl;
+
     switch(choice)
     {
         case 1:
         {
            key=s.read();
            buffer=s.pack();
-           f.write(buffer);
-           i=f.pos;
-           ind.insert(key,i);
+           i=f.write(buffer);
+           index1[l][0]=key;
+           stringstream out;
+           out<<i;
+           i1=out.str();
+           index1[l][1]=i1;
+           l++;
+           sort(l);
+           ind.insert(l);
         }
         break;
         case 2:
@@ -343,9 +370,7 @@ int main()
             cout<<"enter the usn to be searched :";
             cin>>key;
             k=ind.search(key);
-            i=ind.pos;
-            i=i-1;
-            f.unpack(i);
+            s.unpack(k);
         }
         break;
         case 3:
@@ -356,7 +381,7 @@ int main()
             k=ind.search(key);
             if(k==-1)
                 exit(0);
-            ind.rem(key);
+            ind.rem(key,k);
         }
         break;
         default : cout<<"invalid option"<<endl;
