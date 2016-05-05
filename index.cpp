@@ -5,7 +5,81 @@
 #include<sstream>
 #include<sys/types.h>
 #include<unistd.h>
+#include<vector>
+#define max 100
 using namespace std;
+string index1[max][2];
+void sort(int l)
+{
+	string temp,tempu;
+	int usn1=0,usn2=0;
+	cout<<l<<endl;
+	for(int i=0;i<l;i++)
+	{
+		for(int j=i+1;j<l;j++)
+		{
+
+		usn1=atoi(index1[i][0].c_str());
+		usn2=atoi(index1[j][0].c_str());
+		cout<<usn1<<"|||||"<<usn2<<endl;
+		if(usn1>usn2)
+		{
+			temp=index1[i][0];
+			tempu=index1[i][1];
+
+			index1[i][0]=index1[j][0];
+			index1[i][1]=index1[j][1];
+
+			index1[j][0]=temp;
+		    index1[j][1]=tempu;
+		}
+	}
+	}
+	for(int i=0;i<l;i++)
+	{
+		cout<<index1[i][0];
+		cout<<endl;
+	}
+	}
+int load()
+{
+	fstream fp;
+	int l=0;
+	string usn,pos;
+	int i=0;
+	fp.open("inde.txt",ios::in);
+	string buffer;
+	while(!fp.eof())
+	{
+		usn.erase();
+		pos.erase();
+		getline(fp,buffer);
+		if(buffer=="\0" )
+			return 0;
+		 while(buffer[i]!='|')
+		 {
+		    usn+=buffer[i];
+		    i++;
+		 }
+		 i++;
+		 while(buffer[i]!='$')
+		    {
+		    	pos+=buffer[i];
+		    	i++;
+		    }
+		 index1[l][0]=usn;
+		 index1[l][1]=pos;
+		 l++;
+		 i=0;
+	}
+	for(i=0;i<l;i++)
+	{
+		cout<<index1[i][0];
+		cout<<endl;
+	}
+	fp.close();
+	return l-1;
+}
 class student{
     string name;
     string usn;
@@ -99,8 +173,7 @@ void student::unpack(int pos1)
 }
 class file{
 public:
-    int write(string);
-    void del(int);
+    int write(string buf);
 };
 int file :: write(string buf)
 {
@@ -115,27 +188,28 @@ int file :: write(string buf)
 }
 class indf{
 public:
-    void insert(string key,int pos);
+    void insert(int l);
     int search(string key);
     void rem(string key,int pos);
 };
-void indf::insert(string key,int pos)
+void indf::insert(int l)
 {
     fstream fp1;
+    fp1.open("inde.txt",ios::out);
+    fp1.close();
     fp1.open("inde.txt",ios::out|ios::app);
-    string pos1;
-    string temp;
-    stringstream out;
-    out<<pos;
-    pos1=out.str();
     int i;
-    temp=key+'|'+pos1;
-    for(i=temp.size();i<50;i++)
-    	{
-    	temp+='$';
-    	}
-    fp1<<temp;
-    fp1<<endl;
+    string temp;
+    for(i=0;i<l;i++)
+    {
+    	 temp=index1[i][0]+'|'+index1[i][1];
+    	 for(int j=temp.size();j<50;j++)
+    	 {
+    	     temp+='$';
+    	 }
+    	 fp1<<temp;
+    	 fp1<<endl;
+    }
     fp1.close();
 }
 int indf::search(string key)
@@ -188,10 +262,10 @@ int indf::search(string key)
 
 void indf::rem(string key,int pos)
 {
-   string buffer,usn1;
+   string buffer,usn1,i1;
    indf f;
    int i=pos;
-   int j=0,l,siz1=0,loc1=0,pos1=0;
+   int j=0,l1=0,l=0,siz1=0,loc1=0,pos1=0;
    cout<<"value of pos in rem function : "<<i<<endl;
    fstream fp1,fp2,fp3;
    fp1.open("data.txt",ios::in);
@@ -240,23 +314,41 @@ void indf::rem(string key,int pos)
     	   	  i++;
        }
        siz1=buffer.size();
-       f.insert(usn1,pos1);
+       index1[l][0]=usn1;
+
+       stringstream out;
+                  out<<pos1;
+                  i1=out.str();
+                  index1[l1][1]=i1;
+                  l1++;
+                  sort(l1);
+                  f.insert(l1);
+
        }
    fp1.close();
    fp2.close();
 }
+
+
 int main()
 {
-    int choice,i,k;
-    string buffer,key;
+
+    int choice,i,k,l=0,m=0;
+    string buffer,key,i1;
     student s;
     file f;
     indf ind;
+    fstream fp1;
+    fp1.open("inde.txt",ios::in);
+	if(!fp1.eof())
+		l=load();
+    cout<<"l :"<<l<<endl;
     while(1)
     {
     cout<<"1) add\n2) search\n3)delete\n------------\nEnter your choice : ";
     cin>>choice;
     cout<<endl;
+
     switch(choice)
     {
         case 1:
@@ -264,7 +356,14 @@ int main()
            key=s.read();
            buffer=s.pack();
            i=f.write(buffer);
-           ind.insert(key,i);
+           index1[l][0]=key;
+           stringstream out;
+           out<<i;
+           i1=out.str();
+           index1[l][1]=i1;
+           l++;
+           sort(l);
+           ind.insert(l);
         }
         break;
         case 2:
