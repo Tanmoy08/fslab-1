@@ -84,6 +84,7 @@ public:
 	}
 	void addrec(string buffer,int offset)
 	{
+		cout<<"value of offset in addrec : "<<offset<<endl;
 		ofstream f;
 		f.open(filename,ios::out|ios::app);
 		if(offset==-1)
@@ -96,7 +97,7 @@ public:
 		{
 		f.seekp(offset,ios::beg);
 		f<<buffer;
-		f<<endl;
+		//f<<endl;
 		f.close();
 		}
 	}
@@ -130,11 +131,11 @@ public:
 					fstream of(filename);
 					of.clear();
 					of.seekp(pos,ios::beg);
-					of<<'\n';
+					of<<'*';
 					int apos=of.tellp();
 					cout<<"value of apos : "<<apos<<endl;
 					of.close();
-					return pos;
+					return apos;
 				}
 			}
 			getline(ss,name,'|');
@@ -204,5 +205,15 @@ int main()
 		cout<<"value of pos : "<<pos<<endl;
 		l1.insert(pos);
 		cout<<"i guess u deleted succesfully"<<endl;
+	}
+	cout<<"do u want to insert\npress 1 if yes else 0 : ";
+	cin>>i;
+	if(i==1)
+	{
+		Student s5("abcd","6789","ise","7");
+		s=s5.pack(100);
+		pos=l1.get();
+		cout<<"value of get pos in List : "<<pos<<endl;
+		r1.addrec(s,pos);	
 	}
 }
