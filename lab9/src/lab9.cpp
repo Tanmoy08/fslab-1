@@ -25,10 +25,7 @@ public:
 	{
 		string buffer;
 		buffer=usn+'|'+name+'|'+branch+'|'+sem;
-		for(int i=buffer.size();i<n;i++)
-		{
-					buffer+='$';
-		}
+		buffer.resize(n,'$');
 		return buffer;
 	}
 };
@@ -86,18 +83,18 @@ public:
 	{
 		cout<<"value of offset in addrec : "<<offset<<endl;
 		ofstream f;
-		f.open(filename,ios::out|ios::app);
+
 		if(offset==-1)
 		{
+			f.open(filename,ios::out|ios::app);
 			f<<buffer;
-			f<<endl;
 			f.close();
 		}
 		else
 		{
+		f.open(filename,ios::out|ios::in);
 		f.seekp(offset,ios::beg);
 		f<<buffer;
-		//f<<endl;
 		f.close();
 		}
 	}
@@ -110,18 +107,17 @@ public:
 		string branch;
 		string sem;
 		int i=0,pos=0 ;
-		string s;
+		char buff[recsize+1]; buff[recsize]='\0';
 		stringstream ss;
 		cout<<"filename : "<<filename<<endl;
-		fstream f(filename,ios::in);
+		fstream f(filename,ios::in|ios::out);
 		while(!f.eof())
 		{
-			getline(f,s);
-			cout<<"s : "<<s<<endl;
+			pos=f.tellg();
+			f.read(buff,recsize);
+			cout<<"s : "<<buff<<endl;
 			ss.str("");
-			ss<<s;
-			pos=f.tellp();
-			pos=pos-101;
+			ss<<buff;
 			getline(ss,usn,'|');
 			cout<<"usn : "<<usn<<endl;
 			if(key=="usn")
@@ -132,10 +128,8 @@ public:
 					of.clear();
 					of.seekp(pos,ios::beg);
 					of<<'*';
-					int apos=of.tellp();
-					cout<<"value of apos : "<<apos<<endl;
 					of.close();
-					return apos;
+					return pos;
 				}
 			}
 			getline(ss,name,'|');
@@ -214,6 +208,6 @@ int main()
 		s=s5.pack(100);
 		pos=l1.get();
 		cout<<"value of get pos in List : "<<pos<<endl;
-		r1.addrec(s,pos);	
+		r1.addrec(s,pos);
 	}
 }
