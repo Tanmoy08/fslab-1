@@ -1,4 +1,12 @@
 //============================================================================
+// Name        : var3.cpp
+// Author      : v
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+//============================================================================
 // Name        : lab3.cpp
 // Author      : TANMOY PAUL
 // Version     :c++
@@ -12,9 +20,11 @@
 #include <iostream>
 #include<stdio.h>
 #include<unistd.h>
+#include<vector>
 #include<stdlib.h>
 #define max 100
 using namespace std;
+vector<string> extra;
 class Student {
 	string name;
 	string usn;
@@ -137,11 +147,21 @@ public :
 	void modify(string key)
 	{
 		fstream fp1;
-		/*cout<<"enter the filename to be modified"<<endl;
-		char fln[10];
-		cin>>fln;*/
-		int choice;
+		int choice,i=0;
+		string buffer1;
 		int pos1=search(key);
+		pos1=pos1-(fdsize+1);
+		fstream f;
+		f.open("data.txt",ios::in);
+		f.seekg(pos1,ios::beg);
+		getline(f,buffer1);
+		while(!f.eof())
+		{
+			getline(f,buffer1);
+			extra.push_back(buffer1);
+			i++;
+		}
+
 		if (pos1 < 0) {
 			return;
 		}
@@ -187,12 +207,16 @@ public :
 			break;
 		default: cout<<"Enter a valid choice"<<endl;
 		}
-		pos1=pos1-(fdsize+1);
+
 		cout<<"value of pos1:"<<pos1<<endl;
 		fp1.open("data.txt");
 		fp1.seekp(pos1,ios::beg);
 		fp1<<buffer;
 		fp1<<endl;
+		for(int j=0;j<i-1;j++)
+		{
+			fp1<<extra[j]<<endl;
+		}
 		fp1.close();
 	}
 //abcd
